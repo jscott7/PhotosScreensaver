@@ -15,8 +15,8 @@ namespace WPFScreenSaver
     {
         private List<string> ImageFiles = new List<string>();
         private Random RandomGenerator;
-        private bool isActive;
-        private Point mousePosition;
+        private bool IsMouseActive;
+        private Point MousePosition;
 
         // The Timer must be a private object otherwise it will get garbage collected and stop
         private Timer UpdateTimer;
@@ -46,7 +46,14 @@ namespace WPFScreenSaver
             // Setup Timer for updating images
             // Timeperiod needs to be configured by settings
             TimerCallback callback = ShowNextImage;
-            UpdateTimer = new Timer(callback, null, 0, 5000);
+            object delay = SettingsUtilities.LoadSetting("delay");
+            int timerPeriod = 5000;
+            if (int.TryParse(delay.ToString(), out int settingsPeriod))
+            {
+                timerPeriod = settingsPeriod * 1000;
+            }
+
+            UpdateTimer = new Timer(callback, null, 0, timerPeriod);
         }
 
         void OnLoaded(object sender, EventArgs e)
@@ -74,16 +81,16 @@ namespace WPFScreenSaver
         {
             Point currentPosition = e.MouseDevice.GetPosition(this);
             // Set IsActive and MouseLocation only the first time this event is called.
-            if (!isActive)
+            if (!IsMouseActive)
             {
-                mousePosition = currentPosition;
-                isActive = true;
+                MousePosition = currentPosition;
+                IsMouseActive = true;
             }
             else
             {
                 // If the mouse has moved significantly since first call, close.
-                if ((Math.Abs(mousePosition.X - currentPosition.X) > 10) ||
-                    (Math.Abs(mousePosition.Y - currentPosition.Y) > 10))
+                if ((Math.Abs(MousePosition.X - currentPosition.X) > 10) ||
+                    (Math.Abs(MousePosition.Y - currentPosition.Y) > 10))
                 {
                     Application.Current.Shutdown();
                 }

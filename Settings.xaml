@@ -3,12 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Photo ScreenSaver Settings" Height="174.79" Width="455.462" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStyle="ToolWindow">
     <Grid>
-        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="363.134,108.21,0,0" Name="okButton" VerticalAlignment="Top" Width="75" Click="okButton_Click" />
+        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="363.134,108.21,0,0" Name="okButton" VerticalAlignment="Top" Width="75" Click="OkButton_Click" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="124.521,24.546,0,0" Name="delayTextBox" VerticalAlignment="Top" Width="53" />
         <Label Content="Reload Delay (sec)" Height="28" Margin="12.521,19.546,154.479,0" Name="label1" VerticalAlignment="Top" />
         <TextBox x:Name="filePathBox" HorizontalAlignment="Left" Height="23" Margin="124.521,62.275,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="222.952"/>
-        <Button x:Name="button" Content="Browse" Height="23" HorizontalAlignment="Left" Margin="363.134,62.275,0,0" VerticalAlignment="Top" Width="75" Click="browse_Click"/>
+        <Button x:Name="button" Content="Browse" Height="23" HorizontalAlignment="Left" Margin="363.134,62.275,0,0" VerticalAlignment="Top" Width="75" Click="BrowseButton_Click"/>
         <Label x:Name="label" Content="Photos Path" HorizontalAlignment="Left" Margin="12.521,58.275,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="cancelButton" Content="Cancel"  Height="23" HorizontalAlignment="Left" Margin="272.473,108.21,0,0" VerticalAlignment="Top" Width="75" Click="cancelButton_Click" RenderTransformOrigin="2.427,-2.214"/>
+        <Button x:Name="cancelButton" Content="Cancel"  Height="23" HorizontalAlignment="Left" Margin="272.473,108.21,0,0" VerticalAlignment="Top" Width="75" Click="CancelButton_Click" RenderTransformOrigin="2.427,-2.214"/>
     </Grid>
 </Window>

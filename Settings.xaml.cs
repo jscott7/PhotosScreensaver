@@ -8,7 +8,6 @@ namespace WPFScreenSaver
     /// </summary>
     public partial class Settings : Window
     {
-
         public Settings()
         {
             InitializeComponent();
@@ -30,7 +29,7 @@ namespace WPFScreenSaver
             }
         }
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(delayTextBox.Text, out int delay))
             {
@@ -41,19 +40,19 @@ namespace WPFScreenSaver
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void browse_Click(object sender, RoutedEventArgs e)
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             using (var fileDialog = new FolderBrowserDialog())
             {
                 DialogResult result = fileDialog.ShowDialog();
-                if ( result == System.Windows.Forms.DialogResult.OK )
+                if (result == System.Windows.Forms.DialogResult.OK )
                 {
                     filePathBox.Text = fileDialog.SelectedPath;
                 }
             }
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }

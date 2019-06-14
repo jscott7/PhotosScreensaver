@@ -66,7 +66,7 @@ namespace WPFScreenSaver
                 // Creates window on each screen
                 foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
                 {
-                    log.Append(screen.DeviceName).Append(":").Append(screen.Bounds).AppendLine();
+                    log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
                     log.AppendLine("Create Window");
                     PhotoScreenSaver window = new PhotoScreenSaver();
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -86,9 +86,9 @@ namespace WPFScreenSaver
                 }
 
                 //Show the windows
-                foreach (Window window in System.Windows.Application.Current.Windows)
+                foreach (Window window in Current.Windows)
                 {
-                    log.Append("Show").Append(window.Width).Append("-").Append(window.Height).Append("-").Append(window.Left).Append("-").AppendLine(window.Top.ToString());            
+                    log.Append($"Show {window.Width}-{window.Height}-{window.Left}-{window.Top}");            
                     window.Show();
                 }
 

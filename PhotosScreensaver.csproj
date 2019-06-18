@@ -100,4 +100,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy PhotosScreensaver.exe PhotosScreensaver.scr</PostBuildEvent>
+  </PropertyGroup>
 </Project>

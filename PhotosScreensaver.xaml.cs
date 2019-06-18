@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -21,20 +20,11 @@ namespace WPFScreenSaver
         // The Timer must be a private object otherwise it will get garbage collected and stop
         private Timer UpdateTimer;
  
-        public PhotoScreenSaver()
+        public PhotoScreenSaver(List<string> imageFiles)
         {
             InitializeComponent();
 
-            // This needs to be configured via settings
-            object rootPath = SettingsUtilities.LoadSetting("photopath");
-            if ( rootPath == null )
-            {
-                MessageBox.Show("No folder with photos has been set. Open settings to add your folder.", "Photos not found!", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            var baseDirectory = new DirectoryInfo(rootPath.ToString());
-            FileDiscovery(baseDirectory);
+            ImageFiles = imageFiles;
 
             RandomGenerator = new Random(DateTime.Now.Hour * 1000000 + DateTime.Now.Minute * 10000 + DateTime.Now.Millisecond);
           
@@ -169,21 +159,6 @@ namespace WPFScreenSaver
                     Col1.Width = new GridLength(0);
                     Col2.Width = new GridLength(0);
                 }
-            }
-        }
-
-        private void FileDiscovery(DirectoryInfo directory)
-        {
-            foreach (var subDirectory in directory.GetDirectories())
-            {
-                FileDiscovery(subDirectory);
-                foreach (var imageFile in subDirectory.GetFiles())
-                {
-                    if (imageFile.Extension.ToLower() == ".jpg")
-                    {
-                        ImageFiles.Add(imageFile.FullName);
-                    }
-                }               
             }
         }
     }

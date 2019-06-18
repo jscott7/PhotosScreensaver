@@ -1,6 +1,8 @@
 using System;
 using System.Windows;
 using System.Globalization;
+using System.Collections.Generic;
+using System.IO;
 
 namespace WPFScreenSaver
 {
@@ -62,13 +64,24 @@ namespace WPFScreenSaver
             try
             {
                 var log = new System.Text.StringBuilder();
+           
+                object rootPath = SettingsUtilities.LoadSetting("photopath");
+                if (rootPath == null)
+                {
+                    MessageBox.Show("No folder with photos has been set. Open settings to add your folder.", "Photos not found!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var rootDirectory = new DirectoryInfo(rootPath.ToString());
+                List<string> imageFiles = DiscoverImageFiles(rootDirectory);
 
                 // Creates window on each screen
                 foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
                 {
                     log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
                     log.AppendLine("Create Window");
-                    PhotoScreenSaver window = new PhotoScreenSaver();
+                    var window = new PhotoScreenSaver(imageFiles);
+
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
                     System.Drawing.Rectangle location = screen.Bounds;
    
@@ -99,6 +112,31 @@ namespace WPFScreenSaver
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Travers the tree from root directory and save all image filenames
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        /// <remarks>Only .jpg currently supported</remarks>
+        private List<string> DiscoverImageFiles(DirectoryInfo directory)
+        {
+            var imageFiles = new List<string>();
+
+            foreach (var subDirectory in directory.GetDirectories())
+            {
+                DiscoverImageFiles(subDirectory);
+                foreach (var imageFile in subDirectory.GetFiles())
+                {
+                    if (imageFile.Extension.ToLower() == ".jpg")
+                    {
+                        imageFiles.Add(imageFile.FullName);
+                    }
+                }
+            }
+
+            return imageFiles;
         }
     }
 }

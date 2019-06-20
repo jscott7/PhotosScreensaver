@@ -75,12 +75,13 @@ namespace WPFScreenSaver
                 var rootDirectory = new DirectoryInfo(rootPath.ToString());
                 List<string> imageFiles = DiscoverImageFiles(rootDirectory);
 
+                int windowIndex = 1;
                 // Creates window on each screen
                 foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
                 {
                     log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
                     log.AppendLine("Create Window");
-                    var window = new PhotoScreenSaver(imageFiles);
+                    var window = new PhotoScreenSaver(imageFiles, windowIndex++);
 
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
                     System.Drawing.Rectangle location = screen.Bounds;
@@ -126,7 +127,7 @@ namespace WPFScreenSaver
 
             foreach (var subDirectory in directory.GetDirectories())
             {
-                DiscoverImageFiles(subDirectory);
+                imageFiles.AddRange(DiscoverImageFiles(subDirectory));
                 foreach (var imageFile in subDirectory.GetFiles())
                 {
                     if (imageFile.Extension.ToLower() == ".jpg")

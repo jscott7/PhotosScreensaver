@@ -20,13 +20,13 @@ namespace WPFScreenSaver
         // The Timer must be a private object otherwise it will get garbage collected and stop
         private Timer UpdateTimer;
  
-        public PhotoScreenSaver(List<string> imageFiles)
+        public PhotoScreenSaver(List<string> imageFiles, int windowIndex)
         {
             InitializeComponent();
 
             ImageFiles = imageFiles;
 
-            RandomGenerator = new Random(DateTime.Now.Hour * 1000000 + DateTime.Now.Minute * 10000 + DateTime.Now.Millisecond);
+            RandomGenerator = new Random(windowIndex * (DateTime.Now.Hour * 1000000 + DateTime.Now.Minute * 10000 + DateTime.Now.Millisecond));
           
             var screenHeight = this.ActualHeight;
             var screenWidth = this.ActualWidth;

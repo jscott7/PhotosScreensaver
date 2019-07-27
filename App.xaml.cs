@@ -130,10 +130,20 @@ namespace WPFScreenSaver
                 imageFiles.AddRange(DiscoverImageFiles(subDirectory));
                 foreach (var imageFile in subDirectory.GetFiles())
                 {
-                    if (imageFile.Extension.ToLower() == ".jpg")
+                    switch(imageFile.Extension.ToLower())
                     {
-                        imageFiles.Add(imageFile.FullName);
-                    }
+                        case ".jpg":
+                        case ".jpeg":
+                        case ".gif":
+                        case ".bmp":
+                        case ".png":
+                        case ".tiff":
+                            imageFiles.Add(imageFile.FullName);
+                            break;
+
+                        default:
+                            break;
+                    }                
                 }
             }
 

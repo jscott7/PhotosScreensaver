@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace WPFScreenSaver
 {
@@ -87,7 +88,7 @@ namespace WPFScreenSaver
             }
         }
 
-        public void ShowNextImage(Object stateInfo)
+        void ShowNextImage(Object stateInfo)
         {
             // Need InvokeRequired equivalent here...
             if (this.Dispatcher.Thread != Thread.CurrentThread)
@@ -112,15 +113,43 @@ namespace WPFScreenSaver
                 // Open a Uri and decode the image
                 var filename = ImageFiles[(int)index];
                 Uri myUri = new Uri(filename, UriKind.RelativeOrAbsolute);
-                BitmapImage image = new BitmapImage();
+           
+                var image = System.Drawing.Image.FromFile(filename);    
+                int rotationIndex = GetRotationIndex(image);    
 
                 try
                 {
-                    image.BeginInit();
-                    image.UriSource = myUri;
-                    image.EndInit();
+                    var bitmapImage = ConvertImageToBitmapImage(image, rotationIndex);
+
+                    // Draw the Image
+                    ScreenImage.Source = bitmapImage;
+
+                    // Resize the image
+                    // If the height is the largest dimension, set height to screen height and scale width
+                    // And vice versa
+                    var imgHeight = image.Height;
+                    var imgWidth = image.Width;
+                    if (imgHeight >= imgWidth || rotationIndex > 1)
+                    {
+                        // This is portrait. Recalculate the width of the columns to centralise the image
+                        var stretchRatio = screenHeight / imgHeight;
+                        ScreenImage.Width = imgWidth * stretchRatio;
+                        ScreenImage.Height = screenHeight;
+
+                        Col1.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
+                        Col2.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
+                    }
+                    else
+                    {
+                        // This is landscape. Stretch to fill the screen
+                        var stretchRatio = screenWidth / imgWidth;
+                        ScreenImage.Width = screenWidth;
+                        ScreenImage.Height = imgHeight * stretchRatio;
+                        Col1.Width = new GridLength(0);
+                        Col2.Width = new GridLength(0);
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //if (ex.InnerException != null)
                     //{
@@ -133,32 +162,84 @@ namespace WPFScreenSaver
                     ShowNextImage(stateInfo);
                     return;
                 }
+            }
+        }
 
-                // Draw the Image
-                ScreenImage.Source = image;
+        /// <summary>
+        /// Inspect the EXIF metadata for orientation (0x112)
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        private int GetRotationIndex(System.Drawing.Image image)
+        {
+            int rotationIndex = 0;
+            try
+            {
+                var prop = image.GetPropertyItem(0x112);
 
-                // Resize the image
-                // If the height is the largest dimension, set height to screen height and scale width
-                // And vice versa
-                var imgHeight = image.Height;
-                var imgWidth = image.Width;
-                if (imgHeight >= imgWidth)
+                int val = BitConverter.ToUInt16(prop.Value, 0);
+                if (val > 0)
                 {
-                    var stretchRatio = screenHeight / imgHeight;
-                    ScreenImage.Width = imgWidth * stretchRatio;
-                    ScreenImage.Height = screenHeight;
+                    rotationIndex = val;
+                }
+            }
+            catch (ArgumentException) { }
 
-                    Col1.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
-                    Col2.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
-                }
-                else
+            return rotationIndex;
+        }
+
+        /// <summary>
+        /// Get the image format enum from filename
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>The ImageFormat for the filename extension, or default ImageFormat.Jpeg</returns>
+        /// <remarks>
+        /// This is a naieve check on filename extension
+        /// </remarks>
+        private static System.Drawing.Imaging.ImageFormat GetImageFormat(string fileName)
+        {
+            var fileInfo = new FileInfo(fileName);
+            switch (fileInfo.Extension.ToLower())
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return System.Drawing.Imaging.ImageFormat.Jpeg;
+                case ".gif":
+                    return System.Drawing.Imaging.ImageFormat.Gif;
+                case ".bmp":
+                    return System.Drawing.Imaging.ImageFormat.Bmp;
+                case ".png":
+                    return System.Drawing.Imaging.ImageFormat.Png;
+                case ".tiff":
+                    return System.Drawing.Imaging.ImageFormat.Tiff;
+                default:
+                    return System.Drawing.Imaging.ImageFormat.Jpeg;
+            }
+        }
+
+        private static BitmapImage ConvertImageToBitmapImage(System.Drawing.Image image, int rotationIndex)
+        {
+            using (var stream = new MemoryStream())
+            {
+                image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                stream.Position = 0;
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = stream;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+
+                if (rotationIndex == 6)
                 {
-                    var stretchRatio = screenWidth / imgWidth;
-                    ScreenImage.Width = screenWidth;
-                    ScreenImage.Height = imgHeight * stretchRatio;
-                    Col1.Width = new GridLength(0);
-                    Col2.Width = new GridLength(0);
+                    bitmapImage.Rotation = Rotation.Rotate90;
                 }
+                if (rotationIndex == 8)
+                {
+                    bitmapImage.Rotation = Rotation.Rotate270;
+                }
+
+                bitmapImage.EndInit();
+
+                return bitmapImage;
             }
         }
     }

@@ -11,12 +11,13 @@ namespace WPFScreenSaver
     /// <summary>
     /// Interaction logic for PhotoScreenSaver
     /// </summary>
-    public partial class PhotoScreenSaver : Window
+    public partial class PhotoScreenSaver : Window, IDisposable
     {
         private List<string> ImageFiles = new List<string>();
         private Random RandomGenerator;
         private bool IsMouseActive;
         private Point MousePosition;
+        private bool Disposed;
 
         // The Timer must be a private object otherwise it will get garbage collected and stop
         private Timer UpdateTimer;
@@ -149,8 +150,9 @@ namespace WPFScreenSaver
                         Col2.Width = new GridLength(0);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    // Suppress exceptions unless we want to explicitly debug here
                     //if (ex.InnerException != null)
                     //{
                     //    LogFile.WriteLine("{0} for {1}", ex.InnerException.Message, filename);
@@ -241,6 +243,26 @@ namespace WPFScreenSaver
 
                 return bitmapImage;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
+
+            if (disposing)
+            {
+                UpdateTimer.Dispose();
+            }
+
+            Disposed = true;
         }
     }
 }

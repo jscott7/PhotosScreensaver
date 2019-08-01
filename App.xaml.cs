@@ -3,7 +3,10 @@ using System.Windows;
 using System.Globalization;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
+[assembly: ComVisible(false)]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 namespace WPFScreenSaver
 {
     /// <summary>

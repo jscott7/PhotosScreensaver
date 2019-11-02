@@ -5,25 +5,44 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.ComponentModel;
 
 namespace WPFScreenSaver
 {
     /// <summary>
     /// Interaction logic for PhotoScreenSaver
     /// </summary>
-    public partial class PhotoScreenSaver : Window, IDisposable
+    public partial class PhotoScreenSaver : Window, IDisposable, INotifyPropertyChanged
     {
         private List<string> ImageFiles = new List<string>();
         private Random RandomGenerator;
         private bool IsMouseActive;
         private Point MousePosition;
         private bool Disposed;
+        private string CurrentImageSrc = string.Empty;
 
         // The Timer must be a private object otherwise it will get garbage collected and stop
         private Timer UpdateTimer;
- 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string ImageSrc
+        {
+            get 
+            {
+                return this.CurrentImageSrc; 
+            }
+            set
+            {
+                this.CurrentImageSrc = value;
+                OnPropertyChanged("ImageSrc");
+            }
+        }
+
         public PhotoScreenSaver(List<string> imageFiles, int windowIndex)
         {
+            // This is required to get the binding hooked up to the XAML
+            DataContext = this;
+
             InitializeComponent();
 
             ImageFiles = imageFiles;
@@ -113,9 +132,11 @@ namespace WPFScreenSaver
 
                 // Open a Uri and decode the image
                 var filename = ImageFiles[(int)index];
+        
                 Uri myUri = new Uri(filename, UriKind.RelativeOrAbsolute);
-           
-                var image = System.Drawing.Image.FromFile(filename);    
+                ImageSrc = ImageSrcFromFileUri(myUri);  
+                var image = System.Drawing.Image.FromFile(filename);
+   
                 int rotationIndex = GetRotationIndex(image);    
 
                 try
@@ -164,6 +185,20 @@ namespace WPFScreenSaver
                     ShowNextImage(stateInfo);
                     return;
                 }
+            }
+        }
+
+        private string ImageSrcFromFileUri(Uri uri)
+        {
+            string[] fileComponents = uri.AbsolutePath.Split('/');
+            int length = fileComponents.Length;
+            if (length > 3)
+            {
+                return string.Join("/", fileComponents[length - 3], fileComponents[length - 2]);
+            }
+            else
+            {
+                return uri.AbsolutePath;
             }
         }
 
@@ -263,6 +298,11 @@ namespace WPFScreenSaver
             }
 
             Disposed = true;
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

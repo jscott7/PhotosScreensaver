@@ -3,12 +3,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="PhotoScreenSaver" WindowStyle="None" WindowState="Maximized" ResizeMode="NoResize"
     Loaded="OnLoaded" Cursor="None" KeyDown="PhotoStack_KeyDown" MouseDown="PhotoStack_MouseDown" MouseMove="PhotoStack_MouseMove" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="177" d:DesignWidth="272" >
-    <Grid Name="ImageGrid" Background="Black">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Name="Col1"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Name="Col2"/>
-        </Grid.ColumnDefinitions>
-        <Image Name="ScreenImage" Stretch="Uniform" Grid.Column="1"/>
+    <Grid>
+        <Grid Name="ImageGrid" Background="Black">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Name="Col1"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Name="Col2"/>
+            </Grid.ColumnDefinitions>
+            <Image Name="ScreenImage" Stretch="Uniform" Grid.Column="1"/>
+        </Grid>
+        <TextBlock Text="{Binding Path=ImageSrc}"
+                       FontSize="40"
+                       Foreground="Aqua"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom">
+            <TextBlock.Effect>
+                <DropShadowEffect ShadowDepth="0" Color="Black" BlurRadius="10"/>
+            </TextBlock.Effect>
+        </TextBlock>
     </Grid>
 </Window>

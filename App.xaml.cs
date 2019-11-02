@@ -53,7 +53,7 @@ namespace WPFScreenSaver
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace WPFScreenSaver
             try
             {
                 var log = new System.Text.StringBuilder();
-           
+
                 object rootPath = SettingsUtilities.LoadSetting("photopath");
                 if (rootPath == null)
                 {
@@ -88,7 +88,7 @@ namespace WPFScreenSaver
 
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
                     System.Drawing.Rectangle location = screen.Bounds;
-   
+
                     //covers entire monitor
                     window.Left = location.X;
                     window.Top = location.Y;
@@ -105,7 +105,7 @@ namespace WPFScreenSaver
                 //Show the windows
                 foreach (Window window in Current.Windows)
                 {
-                    log.Append($"Show {window.Width}-{window.Height}-{window.Left}-{window.Top}");            
+                    log.Append($"Show {window.Width}-{window.Height}-{window.Left}-{window.Top}");
                     window.Show();
                 }
 
@@ -131,22 +131,23 @@ namespace WPFScreenSaver
             foreach (var subDirectory in directory.GetDirectories())
             {
                 imageFiles.AddRange(DiscoverImageFiles(subDirectory));
-                foreach (var imageFile in subDirectory.GetFiles())
-                {
-                    switch(imageFile.Extension.ToLower())
-                    {
-                        case ".jpg":
-                        case ".jpeg":
-                        case ".gif":
-                        case ".bmp":
-                        case ".png":
-                        case ".tiff":
-                            imageFiles.Add(imageFile.FullName);
-                            break;
+            }
 
-                        default:
-                            break;
-                    }                
+            foreach (var imageFile in directory.GetFiles())
+            {
+                switch (imageFile.Extension.ToLower())
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".gif":
+                    case ".bmp":
+                    case ".png":
+                    case ".tiff":
+                        imageFiles.Add(imageFile.FullName);
+                        break;
+
+                    default:
+                        break;
                 }
             }
 

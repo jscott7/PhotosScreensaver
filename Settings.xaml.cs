@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Forms;
 
-namespace WPFScreenSaver
+namespace PhotosScreensaver
 {
     /// <summary>
     /// Interaction logic for Settings.xaml

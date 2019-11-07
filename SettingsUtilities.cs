@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace WPFScreenSaver
+namespace PhotosScreensaver
 {
     public class SettingsUtilities
     {

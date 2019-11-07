@@ -7,12 +7,13 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.ComponentModel;
 
-namespace WPFScreenSaver
+
+namespace PhotosScreensaver
 {
     /// <summary>
     /// Interaction logic for PhotoScreenSaver
     /// </summary>
-    public partial class PhotoScreenSaver : Window, IDisposable, INotifyPropertyChanged
+    public partial class PhotoScreensaver : Window, IDisposable, INotifyPropertyChanged
     {
         private List<string> ImageFiles = new List<string>();
         private Random RandomGenerator;
@@ -38,7 +39,7 @@ namespace WPFScreenSaver
             }
         }
 
-        public PhotoScreenSaver(List<string> imageFiles, int windowIndex)
+        public PhotoScreensaver(List<string> imageFiles, int windowIndex)
         {
             // This is required to get the binding hooked up to the XAML
             DataContext = this;
@@ -134,7 +135,9 @@ namespace WPFScreenSaver
                 var filename = ImageFiles[(int)index];
         
                 Uri myUri = new Uri(filename, UriKind.RelativeOrAbsolute);
-                ImageSrc = ImageSrcFromFileUri(myUri);  
+                IUrlPrettyPrint urlToString = new UrlFromYearToString();
+
+                ImageSrc = urlToString.ImageSrcFromFileUri(myUri);  
                 var image = System.Drawing.Image.FromFile(filename);
    
                 int rotationIndex = GetRotationIndex(image);    
@@ -185,20 +188,6 @@ namespace WPFScreenSaver
                     ShowNextImage(stateInfo);
                     return;
                 }
-            }
-        }
-
-        private string ImageSrcFromFileUri(Uri uri)
-        {
-            string[] fileComponents = uri.AbsolutePath.Split('/');
-            int length = fileComponents.Length;
-            if (length > 3)
-            {
-                return string.Join("/", fileComponents[length - 3], fileComponents[length - 2]);
-            }
-            else
-            {
-                return uri.AbsolutePath;
             }
         }
 

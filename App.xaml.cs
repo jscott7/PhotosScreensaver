@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-namespace WPFScreenSaver
+namespace PhotosScreensaver
 {
     /// <summary>
     /// Application level logic. Handling screensaver options and creating the main window(s)
@@ -84,7 +84,7 @@ namespace WPFScreenSaver
                 {
                     log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
                     log.AppendLine("Create Window");
-                    var window = new PhotoScreenSaver(imageFiles, windowIndex++);
+                    var window = new PhotoScreensaver(imageFiles, windowIndex++);
 
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
                     System.Drawing.Rectangle location = screen.Bounds;

@@ -69,8 +69,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IUrlPrettyPrint.cs" />
-    <Compile Include="UrlFromYearToString.cs" />
+    <Compile Include="ILabelDisplay.cs" />
+    <Compile Include="DisplayPathFromYear.cs" />
     <Page Include="PhotosScreensaver.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

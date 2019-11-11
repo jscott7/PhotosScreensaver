@@ -11,7 +11,7 @@ namespace PhotosScreensaver
     /// returns
     /// 2019/November/London
     /// </summary>
-    public class UrlFromYearToString : IUrlPrettyPrint
+    public class DisplayPathFromYear : ILabelDisplay
     {
         public string ImageSrcFromFileUri(Uri uri)
         {

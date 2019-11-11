@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotosScreensaver
 {
-    public interface IUrlPrettyPrint
+    public interface ILabelDisplay
     {
         string ImageSrcFromFileUri(Uri uri);
     }

@@ -134,7 +134,7 @@ namespace PhotosScreensaver
                 var filename = ImageFiles[(int)index];
         
                 Uri myUri = new Uri(filename, UriKind.RelativeOrAbsolute);
-                IUrlPrettyPrint urlToString = new UrlFromYearToString();
+                ILabelDisplay urlToString = new DisplayPathFromYear();
 
                 ImageSrc = urlToString.ImageSrcFromFileUri(myUri);  
                 var image = System.Drawing.Image.FromFile(filename);

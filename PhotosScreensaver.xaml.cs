@@ -7,7 +7,6 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.ComponentModel;
 
-
 namespace PhotosScreensaver
 {
     /// <summary>
@@ -212,35 +211,6 @@ namespace PhotosScreensaver
             catch (ArgumentException) { }
 
             return rotationIndex;
-        }
-
-        /// <summary>
-        /// Get the image format enum from filename
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns>The ImageFormat for the filename extension, or default ImageFormat.Jpeg</returns>
-        /// <remarks>
-        /// This is a naieve check on filename extension
-        /// </remarks>
-        private static System.Drawing.Imaging.ImageFormat GetImageFormat(string fileName)
-        {
-            var fileInfo = new FileInfo(fileName);
-            switch (fileInfo.Extension.ToLower())
-            {
-                case ".jpg":
-                case ".jpeg":
-                    return System.Drawing.Imaging.ImageFormat.Jpeg;
-                case ".gif":
-                    return System.Drawing.Imaging.ImageFormat.Gif;
-                case ".bmp":
-                    return System.Drawing.Imaging.ImageFormat.Bmp;
-                case ".png":
-                    return System.Drawing.Imaging.ImageFormat.Png;
-                case ".tiff":
-                    return System.Drawing.Imaging.ImageFormat.Tiff;
-                default:
-                    return System.Drawing.Imaging.ImageFormat.Jpeg;
-            }
         }
 
         private static BitmapImage ConvertImageToBitmapImage(System.Drawing.Image image, int rotationIndex)

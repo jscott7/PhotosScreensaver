@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PhotosScreensaver
 {
@@ -36,7 +33,12 @@ namespace PhotosScreensaver
 
             if (startIndex != -1)
             {
-                return string.Join("/", pathComponents[startIndex], pathComponents[length - 2]);
+                var stringBuilder = new StringBuilder();
+                for (int index = startIndex; index < length - 1; index++)
+                {
+                    stringBuilder.Append(pathComponents[index]).Append("/");
+                }
+                return stringBuilder.ToString();
             }
             else
             {

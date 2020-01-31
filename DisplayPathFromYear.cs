@@ -15,12 +15,12 @@ namespace PhotosScreensaver
     {
         public string ImageSrcFromFileUri(Uri uri)
         {
-            string path = Uri.UnescapeDataString(uri.AbsolutePath);
-            string[] pathComponents = path.Split('/');
-
-            string regexPattern = @"^\d{4}$";
+            var path = Uri.UnescapeDataString(uri.AbsolutePath);
+            var pathComponents = path.Split('/');
+            var regexPattern = @"^\d{4}$";
             int length = pathComponents.Length;
             int startIndex = -1;
+
             for (int pathIndex = 0; pathIndex < length - 1; pathIndex++)
             {
                 Match m = Regex.Match(pathComponents[pathIndex], regexPattern, RegexOptions.IgnoreCase);
@@ -38,7 +38,9 @@ namespace PhotosScreensaver
                 {
                     stringBuilder.Append(pathComponents[index]).Append("/");
                 }
-                return stringBuilder.ToString();
+
+                // Trim the trailing '/'
+                return stringBuilder.ToString().Substring(0, stringBuilder.Length - 1);
             }
             else
             {

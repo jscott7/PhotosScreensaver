@@ -69,6 +69,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileDiscovery.cs" />
+    <Compile Include="FileDiscoveryMode.cs" />
     <Compile Include="ILabelDisplay.cs" />
     <Compile Include="DisplayPathFromYear.cs" />
     <Page Include="PhotosScreensaver.xaml">

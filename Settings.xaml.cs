@@ -13,6 +13,7 @@ namespace PhotosScreensaver
             InitializeComponent();
             var delay = SettingsUtilities.LoadSetting("delay");
             var path = SettingsUtilities.LoadSetting("photopath");
+            var imageDiscoveryMode = SettingsUtilities.LoadSetting("imagediscoverymode");
 
             if (path != null)
             {
@@ -27,6 +28,15 @@ namespace PhotosScreensaver
             {
                 delayTextBox.Text = "5";
             }
+
+            if (imageDiscoveryMode == null || imageDiscoveryMode.ToString() == "AllFiles")
+            {
+                DiscoverAllImages.IsChecked = true;
+            }
+            else if (imageDiscoveryMode.ToString() == "FilesInRandomDirectory")
+            {
+                ImagesFromRandomDirectory.IsChecked = true;
+            }
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -37,6 +47,16 @@ namespace PhotosScreensaver
             }
 
             SettingsUtilities.SaveSetting("photopath", filePathBox.Text);
+
+            if (DiscoverAllImages.IsChecked.GetValueOrDefault())
+            {
+                SettingsUtilities.SaveSetting("imagediscoverymode", "AllFiles");
+            }
+            else if (ImagesFromRandomDirectory.IsChecked.GetValueOrDefault())
+            {
+                SettingsUtilities.SaveSetting("imagediscoverymode", "FilesInRandomDirectory");
+            }
+
             System.Windows.Application.Current.Shutdown();
         }
 

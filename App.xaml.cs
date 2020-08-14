@@ -75,8 +75,18 @@ namespace PhotosScreensaver
                     return;
                 }
 
+                // Load the image files here so they are available for all screens
                 var rootDirectory = new DirectoryInfo(rootPath.ToString());
-                List<string> imageFiles = DiscoverImageFiles(rootDirectory);
+
+                var imageDiscoveryMode = FileDiscoveryMode.AllFiles; 
+                object discoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode");
+
+                if (discoveryModeSetting != null)
+                {
+                    imageDiscoveryMode = (FileDiscoveryMode)Enum.Parse(typeof(FileDiscoveryMode), discoveryModeSetting.ToString());
+                }
+
+                var imageFiles = FileDiscovery.DiscoverImageFiles(rootDirectory, imageDiscoveryMode);
 
                 int windowIndex = 1;
                 // Creates window on each screen
@@ -116,42 +126,6 @@ namespace PhotosScreensaver
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Travers the tree from root directory and save all image filenames
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <returns></returns>
-        /// <remarks>Only .jpg currently supported</remarks>
-        private List<string> DiscoverImageFiles(DirectoryInfo directory)
-        {
-            var imageFiles = new List<string>();
-
-            foreach (var subDirectory in directory.GetDirectories())
-            {
-                imageFiles.AddRange(DiscoverImageFiles(subDirectory));
-            }
-
-            foreach (var imageFile in directory.GetFiles())
-            {
-                switch (imageFile.Extension.ToLower())
-                {
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".gif":
-                    case ".bmp":
-                    case ".png":
-                    case ".tiff":
-                        imageFiles.Add(imageFile.FullName);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return imageFiles;
         }
     }
 }

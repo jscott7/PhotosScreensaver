@@ -37,6 +37,10 @@ namespace PhotosScreensaver
             {
                 ImagesFromRandomDirectory.IsChecked = true;
             }
+            else if (imageDiscoveryMode.ToString() == "RandomSelection")
+            {
+                RandomSelection.IsChecked = true;
+            }
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -55,6 +59,10 @@ namespace PhotosScreensaver
             else if (ImagesFromRandomDirectory.IsChecked.GetValueOrDefault())
             {
                 SettingsUtilities.SaveSetting("imagediscoverymode", "FilesInRandomDirectory");
+            }
+            else if (RandomSelection.IsChecked.GetValueOrDefault())
+            {
+                SettingsUtilities.SaveSetting("imagediscoverymode", "RandomSelection");
             }
 
             System.Windows.Application.Current.Shutdown();

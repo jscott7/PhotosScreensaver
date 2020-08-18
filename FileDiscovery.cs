@@ -20,6 +20,10 @@ namespace PhotosScreensaver
                     return DiscoverImageFilesForAllDirectories(directory);
                 case FileDiscoveryMode.FilesInRandomDirectory:
                     return DiscoverImageFilesForRandomDirectory(directory);
+                case FileDiscoveryMode.RandomSelection:
+                    var random = new Random();
+                    var randomDiscoveryMode = (FileDiscoveryMode)random.Next(2);
+                    return DiscoverImageFiles(directory, randomDiscoveryMode);
                 default:
                     return DiscoverImageFilesForAllDirectories(directory);
             }

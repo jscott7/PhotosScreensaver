@@ -25,6 +25,7 @@ namespace PhotosScreensaver
         private Timer UpdateTimer;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public string ImageSrc
         {
             get 
@@ -132,11 +133,11 @@ namespace PhotosScreensaver
 
                 // Open a Uri and decode the image
                 var filename = ImageFiles[(int)index];
-        
-                Uri myUri = new Uri(filename, UriKind.RelativeOrAbsolute);
-                ILabelDisplay urlToString = new DisplayPathFromYear();
+                var fileUri = new Uri(filename, UriKind.RelativeOrAbsolute);
 
-                ImageSrc = urlToString.ImageSrcFromFileUri(myUri);  
+                // TODO Use dependency injection to create ILableDisplay dynamically
+                ILabelDisplay urlToString = new DisplayPathFromYear();
+                ImageSrc = urlToString.ImageSrcFromFileUri(fileUri);  
                 var image = System.Drawing.Image.FromFile(filename);
    
                 int rotationIndex = GetRotationIndex(image);    

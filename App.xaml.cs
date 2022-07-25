@@ -1,10 +1,7 @@
 using System;
 using System.Windows;
 using System.Globalization;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-
 
 namespace PhotosScreensaver
 {

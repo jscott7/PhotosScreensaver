@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotosScreensaver", "PhotosScreensaver.csproj", "{5EE76C1A-E9CC-446B-99D2-1E90A8EDEE56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotosScreensaver", "PhotosScreensaver/PhotosScreensaver.csproj", "{5EE76C1A-E9CC-446B-99D2-1E90A8EDEE56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -39,8 +39,9 @@ namespace PhotosScreensaver
                     stringBuilder.Append(pathComponents[index]).Append("/");
                 }
 
-                // Trim the trailing '/'            
-                return stringBuilder.Length--.ToString();
+                // Trim the trailing '/'
+                stringBuilder.Length--;
+                return stringBuilder.ToString();
             }
             else
             {

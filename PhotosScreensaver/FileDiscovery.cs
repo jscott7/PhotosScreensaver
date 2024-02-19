@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Automation;
 
 namespace PhotosScreensaver
 {
@@ -50,6 +49,7 @@ namespace PhotosScreensaver
 
             return imageFiles;
         }
+
         private static List<string> DiscoverImageFilesForThisWeek(DirectoryInfo directory)
         {
             var imageFiles = new List<string>();
@@ -115,18 +115,9 @@ namespace PhotosScreensaver
         {     
             foreach (var imageFile in directory.GetFiles())
             {
-                if (thisWeek)
-                {            
-                    var upper = DateTime.Now.AddDays(7);
-                    var lower = DateTime.Now.AddDays(-7);
-                    var created = imageFile.CreationTime;
-                    if (!(created.Month >= lower.Month &&
-                        created.Month <= upper.Month &&
-                        created.Day >= lower.Day && 
-                        created.Day <= upper.Day))
-                    {
-                        continue;
-                    }
+                if (thisWeek && !IsCreatedInTimeLimit(imageFile, DateTime.Now))
+                {
+                    continue;
                 }
 
                 switch (imageFile.Extension.ToLower())
@@ -144,6 +135,17 @@ namespace PhotosScreensaver
                         break;
                 }
             }
+        }
+
+        internal static bool IsCreatedInTimeLimit(FileInfo imageFile, DateTime referenceDate)
+        {
+            var upper = referenceDate.AddDays(7);
+            var lower = referenceDate.AddDays(-7);
+            var created = imageFile.CreationTime;
+            return created.Month >= lower.Month &&
+                   created.Month <= upper.Month &&
+                   created.Day >= lower.Day &&
+                   created.Day <= upper.Day;
         }
     }
 }

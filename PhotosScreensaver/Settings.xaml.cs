@@ -60,10 +60,15 @@ namespace PhotosScreensaver
             {
                 SettingsUtilities.SaveSetting("imagediscoverymode", "FilesInRandomDirectory");
             }
+            else if (ThisWeekInHistory.IsChecked.GetValueOrDefault())
+                    {
+                SettingsUtilities.SaveSetting("imagediscoverymode", "ThisWeekInHistory");
+            }
             else if (RandomSelection.IsChecked.GetValueOrDefault())
             {
                 SettingsUtilities.SaveSetting("imagediscoverymode", "RandomSelection");
             }
+         
 
             System.Windows.Application.Current.Shutdown();
         }

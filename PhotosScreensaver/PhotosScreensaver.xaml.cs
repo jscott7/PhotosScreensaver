@@ -60,6 +60,7 @@ namespace PhotosScreensaver
             TimerCallback callback = ShowNextImage;
             object delay = SettingsUtilities.LoadSetting("delay");
             int timerPeriod = 5000;
+
             if (int.TryParse(delay.ToString(), out int settingsPeriod))
             {
                 timerPeriod = settingsPeriod * 1000;

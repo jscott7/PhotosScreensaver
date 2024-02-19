@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Automation;
 
 namespace PhotosScreensaver
 {
@@ -24,6 +25,8 @@ namespace PhotosScreensaver
                     var random = new Random();
                     var randomDiscoveryMode = (FileDiscoveryMode)random.Next(2);
                     return DiscoverImageFiles(directory, randomDiscoveryMode);
+                case FileDiscoveryMode.ThisWeekInHistory:
+                    return DiscoverImageFilesForThisWeek(directory);
                 default:
                     return DiscoverImageFilesForAllDirectories(directory);
             }
@@ -43,7 +46,20 @@ namespace PhotosScreensaver
                 imageFiles.AddRange(DiscoverImageFilesForAllDirectories(subDirectory));
             }
 
-            GetFilesForSingleDirectory(directory, imageFiles);
+            GetFilesForSingleDirectory(directory, imageFiles, false);
+
+            return imageFiles;
+        }
+        private static List<string> DiscoverImageFilesForThisWeek(DirectoryInfo directory)
+        {
+            var imageFiles = new List<string>();
+
+            foreach (var subDirectory in directory.GetDirectories())
+            {
+                imageFiles.AddRange(DiscoverImageFilesForThisWeek(subDirectory));
+            }
+
+            GetFilesForSingleDirectory(directory, imageFiles, true);
 
             return imageFiles;
         }
@@ -63,7 +79,7 @@ namespace PhotosScreensaver
             var directoryToUse = candidateDirectories[(int)index];
 
             var imageFiles = new List<string>();
-            GetFilesForSingleDirectory(directoryToUse, imageFiles);
+            GetFilesForSingleDirectory(directoryToUse, imageFiles, false);
             return imageFiles;
         }
 
@@ -89,10 +105,30 @@ namespace PhotosScreensaver
             return directories;      
         }
 
-        private static void GetFilesForSingleDirectory(DirectoryInfo directory, List<string> imageFiles)
+        /// <summary>
+        /// Adds files matching image type to list
+        /// </summary>
+        /// <param name="directory">Directory containing files</param>
+        /// <param name="imageFiles">List of valid filanames</param>
+        /// <param name="thisWeek">Flag indicating whether to keep only files that were created within +- 7 days of current date</param>
+        private static void GetFilesForSingleDirectory(DirectoryInfo directory, List<string> imageFiles, bool thisWeek)
         {     
             foreach (var imageFile in directory.GetFiles())
             {
+                if (thisWeek)
+                {            
+                    var upper = DateTime.Now.AddDays(7);
+                    var lower = DateTime.Now.AddDays(-7);
+                    var created = imageFile.CreationTime;
+                    if (!(created.Month >= lower.Month &&
+                        created.Month <= upper.Month &&
+                        created.Day >= lower.Day && 
+                        created.Day <= upper.Day))
+                    {
+                        continue;
+                    }
+                }
+
                 switch (imageFile.Extension.ToLower())
                 {
                     case ".jpg":

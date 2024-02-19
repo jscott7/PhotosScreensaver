@@ -18,6 +18,11 @@
         /// <summary>
         /// Use a random choice of AllFiles or FilesInRandomDirectory
         /// </summary>
-        RandomSelection
+        RandomSelection,
+
+        /// <summary>
+        /// Image files from this week across all years
+        /// </summary>
+        ThisWeekInHistory
     }
 }

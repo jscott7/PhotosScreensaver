@@ -19,7 +19,7 @@ A label is displayed giving information for each image. There is currently a sin
 
 To install on your Desktop:
 
-1.  Copy the .scr file from the bin\Release folder to convenient location on your C: drive.
+1.  Copy the bin\Release folder to convenient location on your C: drive.
 2.  Right click the .scr file.
 3.  Select Install.
 

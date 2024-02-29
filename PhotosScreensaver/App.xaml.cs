@@ -60,9 +60,10 @@ namespace PhotosScreensaver
         /// </remarks>
         void ShowScreensaver()
         {
+            var log = new System.Text.StringBuilder();
             try
             {
-                var log = new System.Text.StringBuilder();
+                log.AppendLine($"Started {DateTime.Now}");
 
                 object rootPath = SettingsUtilities.LoadSetting("photopath");
                 if (rootPath == null)
@@ -70,6 +71,8 @@ namespace PhotosScreensaver
                     MessageBox.Show("No folder with photos has been set. Open settings to add your folder.", "Photos not found!", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                log.AppendLine(rootPath.ToString());
 
                 // Load the image files here so they are available for all screens
                 var rootDirectory = new DirectoryInfo(rootPath.ToString());
@@ -83,9 +86,14 @@ namespace PhotosScreensaver
                 }
 
                 var imageFiles = FileDiscovery.DiscoverImageFiles(rootDirectory, imageDiscoveryMode);
+                log.AppendLine($"Loaded {imageFiles.Count} images");
+                if (imageFiles.Count == 0)
+                {
+                    throw new Exception($"No files found matching {imageDiscoveryMode}");              
+                }
 
                 int windowIndex = 1;
-                // Creates window on each screen
+                // Creates window on each available screen
                 foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
                 {
                     log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
@@ -114,13 +122,17 @@ namespace PhotosScreensaver
                     log.Append($"Show {window.Width}-{window.Height}-{window.Left}-{window.Top}");
                     window.Show();
                 }
-
-                // Debugging
-                // System.IO.File.WriteAllText(@"C:\Temp\text.txt", log.ToString());
             }
             catch (Exception ex)
             {
+                log.Append(ex.ToString());
                 MessageBox.Show(ex.Message);
+                Application.Current.Shutdown();
+            }
+            finally
+            {
+                // Debugging
+                // File.WriteAllText(@"C:\Temp\text.txt", log.ToString());
             }
         }
     }

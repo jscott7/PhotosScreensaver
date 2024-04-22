@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -28,21 +30,33 @@ namespace PhotosScreensaver
             {
                 delayTextBox.Text = "5";
             }
+            
 
-            if (imageDiscoveryMode == null || imageDiscoveryMode.ToString() == "AllFiles")
+            if (imageDiscoveryMode == null)
             {
                 DiscoverAllImages.IsChecked = true;
             }
-            else if (imageDiscoveryMode.ToString() == "FilesInRandomDirectory")
+            else
             {
-                ImagesFromRandomDirectory.IsChecked = true;
-            }
-            else if (imageDiscoveryMode.ToString() == "RandomSelection")
-            {
-                RandomSelection.IsChecked = true;
+                switch (imageDiscoveryMode.ToString()) 
+                {
+                    case "FilesInRandomDirectory":
+                        ImagesFromRandomDirectory.IsChecked = true;
+                        break;
+                    case "RandomSelection":
+                        RandomSelection.IsChecked = true;
+                        break;
+                    case "ThisWeekInHistory":
+                        ThisWeekInHistory.IsChecked = true;
+                        break;
+                    default:
+                        DiscoverAllImages.IsChecked = true;
+                        break;
+                }
             }
         }
 
+        [SupportedOSPlatform("windows")]
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(delayTextBox.Text, out int delay))

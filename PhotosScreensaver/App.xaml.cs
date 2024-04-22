@@ -65,7 +65,12 @@ namespace PhotosScreensaver
             {
                 log.AppendLine($"Started {DateTime.Now}");
 
-                object rootPath = SettingsUtilities.LoadSetting("photopath");
+                object rootPath = null;
+                if (OperatingSystem.IsWindows())
+                {
+                    rootPath = SettingsUtilities.LoadSetting("photopath");
+                }
+
                 if (rootPath == null)
                 {
                     MessageBox.Show("No folder with photos has been set. Open settings to add your folder.", "Photos not found!", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -76,20 +81,26 @@ namespace PhotosScreensaver
 
                 // Load the image files here so they are available for all screens
                 var rootDirectory = new DirectoryInfo(rootPath.ToString());
+                var imageDiscoveryMode = FileDiscoveryMode.AllFiles;
+                var discoveryModeSetting = "";
 
-                var imageDiscoveryMode = FileDiscoveryMode.AllFiles; 
-                object discoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode");
-
-                if (discoveryModeSetting != null)
+                if (OperatingSystem.IsWindows())
                 {
-                    imageDiscoveryMode = (FileDiscoveryMode)Enum.Parse(typeof(FileDiscoveryMode), discoveryModeSetting.ToString());
+                    discoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode")?.ToString();
+                }           
+
+                if (!string.IsNullOrEmpty(discoveryModeSetting))
+                {
+                    imageDiscoveryMode = (FileDiscoveryMode)Enum.Parse(typeof(FileDiscoveryMode), discoveryModeSetting);
                 }
 
                 var imageFiles = FileDiscovery.DiscoverImageFiles(rootDirectory, imageDiscoveryMode);
+
                 log.AppendLine($"Loaded {imageFiles.Count} images");
+                // If no image files are found with the selected discovery mode, default to loading all files
                 if (imageFiles.Count == 0)
                 {
-                    throw new Exception($"No files found matching {imageDiscoveryMode}");              
+                    FileDiscovery.DiscoverImageFiles(rootDirectory, FileDiscoveryMode.AllFiles);            
                 }
 
                 int windowIndex = 1;

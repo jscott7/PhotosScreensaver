@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Windows;
@@ -15,7 +16,12 @@ namespace PhotosScreensaver
             InitializeComponent();
             var delay = SettingsUtilities.LoadSetting("delay");
             var path = SettingsUtilities.LoadSetting("photopath");
-            var imageDiscoveryMode = SettingsUtilities.LoadSetting("imagediscoverymode");
+            var imageDiscoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode").ToString();
+
+            if (!Enum.TryParse(imageDiscoveryModeSetting, true, out FileDiscoveryMode imageDiscoveryMode))
+            {
+                imageDiscoveryMode = FileDiscoveryMode.AllFiles;
+            }
 
             if (path != null)
             {
@@ -30,29 +36,21 @@ namespace PhotosScreensaver
             {
                 delayTextBox.Text = "5";
             }
-            
 
-            if (imageDiscoveryMode == null)
+            switch (imageDiscoveryMode)
             {
-                DiscoverAllImages.IsChecked = true;
-            }
-            else
-            {
-                switch (imageDiscoveryMode.ToString()) 
-                {
-                    case "FilesInRandomDirectory":
-                        ImagesFromRandomDirectory.IsChecked = true;
-                        break;
-                    case "RandomSelection":
-                        RandomSelection.IsChecked = true;
-                        break;
-                    case "ThisWeekInHistory":
-                        ThisWeekInHistory.IsChecked = true;
-                        break;
-                    default:
-                        DiscoverAllImages.IsChecked = true;
-                        break;
-                }
+                case FileDiscoveryMode.FilesInRandomDirectory:
+                    ImagesFromRandomDirectory.IsChecked = true;
+                    break;
+                case FileDiscoveryMode.RandomSelection:
+                    RandomSelection.IsChecked = true;
+                    break;
+                case FileDiscoveryMode.ThisWeekInHistory:
+                    ThisWeekInHistory.IsChecked = true;
+                    break;
+                default:
+                    DiscoverAllImages.IsChecked = true;
+                    break;
             }
         }
 

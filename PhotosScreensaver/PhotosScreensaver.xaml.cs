@@ -58,8 +58,8 @@ namespace PhotosScreensaver
             // Setup Timer for updating images
             // Timeperiod needs to be configured by settings
             TimerCallback callback = ShowNextImage;
-            object delay = SettingsUtilities.LoadSetting("delay");
-            int timerPeriod = 5000;
+            var delay = SettingsUtilities.LoadSetting("delay");
+            var timerPeriod = 5000;
 
             if (int.TryParse(delay.ToString(), out int settingsPeriod))
             {

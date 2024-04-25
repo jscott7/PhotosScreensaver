@@ -56,7 +56,6 @@ namespace PhotosScreensaver
             }
         }
 
-        [SupportedOSPlatform("windows")]
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(delayTextBox.Text, out int delay))

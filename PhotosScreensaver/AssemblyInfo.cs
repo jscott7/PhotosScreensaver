@@ -13,14 +13,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ScreenSaver")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ScreenSaver")]
-[assembly: AssemblyCopyright("Copyright @  2006")]
+[assembly: AssemblyCopyright("Copyright @ Jonathan Scott 2006-2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
 //In order to begin building localizable applications, set 
 //<UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file
 //inside a <PropertyGroup>.  For example, if you are using US english

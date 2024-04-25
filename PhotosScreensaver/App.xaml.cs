@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Globalization;
 using System.IO;
+using System.Diagnostics;
 
 namespace PhotosScreensaver
 {
@@ -65,11 +66,7 @@ namespace PhotosScreensaver
             {
                 log.AppendLine($"Started {DateTime.Now}");
 
-                object rootPath = null;
-                if (OperatingSystem.IsWindows())
-                {
-                    rootPath = SettingsUtilities.LoadSetting("photopath");
-                }
+                var rootPath = SettingsUtilities.LoadSetting("photopath");
 
                 if (rootPath == null)
                 {
@@ -82,12 +79,7 @@ namespace PhotosScreensaver
                 // Load the image files here so they are available for all screens
                 var rootDirectory = new DirectoryInfo(rootPath.ToString());
                 var imageDiscoveryMode = FileDiscoveryMode.AllFiles;
-                var discoveryModeSetting = "";
-
-                if (OperatingSystem.IsWindows())
-                {
-                    discoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode")?.ToString();
-                }           
+                var discoveryModeSetting = SettingsUtilities.LoadSetting("imagediscoverymode")?.ToString();           
 
                 if (!string.IsNullOrEmpty(discoveryModeSetting))
                 {
@@ -95,12 +87,12 @@ namespace PhotosScreensaver
                 }
 
                 var imageFiles = FileDiscovery.DiscoverImageFiles(rootDirectory, imageDiscoveryMode);
-
                 log.AppendLine($"Loaded {imageFiles.Count} images");
+
                 // If no image files are found with the selected discovery mode, default to loading all files
                 if (imageFiles.Count == 0)
                 {
-                    FileDiscovery.DiscoverImageFiles(rootDirectory, FileDiscoveryMode.AllFiles);            
+                    imageFiles = FileDiscovery.DiscoverImageFiles(rootDirectory, FileDiscoveryMode.AllFiles);            
                 }
 
                 int windowIndex = 1;

@@ -12,7 +12,6 @@ namespace PhotosScreensaver
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        [SupportedOSPlatform("windows")]
         public static void SaveSetting(string name, object value)
         {
             var key = Registry.CurrentUser.CreateSubKey(_keyName);
@@ -28,7 +27,6 @@ namespace PhotosScreensaver
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [SupportedOSPlatform("windows")]
         public static object LoadSetting(string name)
         {
             // Get the value stored in the Registry  

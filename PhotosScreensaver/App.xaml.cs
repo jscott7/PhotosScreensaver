@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Globalization;
 using System.IO;
-using System.Diagnostics;
+using System.Drawing;
 
 namespace PhotosScreensaver
 {
@@ -99,12 +99,20 @@ namespace PhotosScreensaver
                 // Creates window on each available screen
                 foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
                 {
+                    int scaleFactor = 1;
+                    using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+                    {
+                        float dpiX = graphics.DpiX;
+                        scaleFactor = (int)(dpiX / 96.0f); // 96 is the standard DPI
+                    }
+
                     log.Append($"{screen.DeviceName}:{screen.Bounds}").AppendLine();
                     log.AppendLine("Create Window");
                     var window = new PhotoScreensaver(imageFiles, windowIndex++);
 
+                    var screenBounds = new Rectangle(screen.Bounds.X / scaleFactor, screen.Bounds.Y / scaleFactor, screen.Bounds.Width / scaleFactor, screen.Bounds.Height / scaleFactor);
                     window.WindowStartupLocation = WindowStartupLocation.Manual;
-                    System.Drawing.Rectangle location = screen.Bounds;
+                    var location = screenBounds;
 
                     //covers entire monitor
                     window.Left = location.X;

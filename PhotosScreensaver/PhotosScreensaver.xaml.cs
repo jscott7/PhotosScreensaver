@@ -116,7 +116,7 @@ namespace PhotosScreensaver
             if (this.Dispatcher.Thread != Thread.CurrentThread)
             {
                 // Use Action so we don't have to explictly define a delegate
-                this.Dispatcher.Invoke(new Action<Object>(ShowNextImage), new object[] { stateInfo });
+                this.Dispatcher.Invoke(new Action<Object>(ShowNextImage), [stateInfo]);
             }
             else
             {

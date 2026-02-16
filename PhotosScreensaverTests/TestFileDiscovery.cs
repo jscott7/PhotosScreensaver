@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.IO;
+using NUnit.Framework;
 using PhotosScreensaver;
+
 namespace PhotosScreensaverTests
 {
     public class TestFileDiscovery

@@ -150,27 +150,25 @@ namespace PhotosScreensaver
                     // Draw the Image
                     ScreenImage.Source = bitmapImage;
 
-                    // Resize the image
-                    // If the height is the largest dimension, set height to screen height and scale width
-                    // And vice versa
+                    // Resize and center the image
                     var imgHeight = image.Height;
                     var imgWidth = image.Width;
-                    if (imgHeight >= imgWidth || rotationIndex > 1)
-                    {
-                        // This is portrait. Recalculate the width of the columns to centralise the image
+
+                    if (screenHeight <= screenWidth)
+                    {  
+                        // Screen is oriented as landscape
                         var stretchRatio = screenHeight / imgHeight;
                         ScreenImage.Width = imgWidth * stretchRatio;
                         ScreenImage.Height = screenHeight;
-
                         Col1.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
-                        Col2.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);
+                        Col2.Width = new GridLength((screenWidth - ScreenImage.Width) / 2);       
                     }
                     else
                     {
-                        // This is landscape. Stretch to fill the screen
+                        // Screen is oriented as portrait
                         var stretchRatio = screenWidth / imgWidth;
-                        ScreenImage.Width = screenWidth;
-                        ScreenImage.Height = imgHeight * stretchRatio;
+                        ScreenImage.Width = imgWidth;
+                        ScreenImage.Height = imgHeight * stretchRatio; ;
                         Col1.Width = new GridLength(0);
                         Col2.Width = new GridLength(0);
                     }
